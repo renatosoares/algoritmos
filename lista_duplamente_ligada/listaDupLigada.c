@@ -45,7 +45,8 @@ int ins_inicio_lista (struct ListaDupla * lista, int dado){
   lista->inicio = novo_elemento;   
   lista->tamanho++;   
   return 0;   
-}   
+} 
+
 void inverter(struct ListaDupla *lista){   
 	struct ListaDuplaDado *em_curso;   
 	em_curso = lista->fim;   
@@ -55,10 +56,11 @@ void inverter(struct ListaDupla *lista){
 	}   
 	printf("\n");   
 }
+
 void inserirOrdenado(struct ListaDupla * lista, int n)
 {
 
-}
+} 
 
 
 
@@ -80,12 +82,14 @@ int ins_depois (struct ListaDupla * lista, int dado, int pos){
 }
 void inserirMeio(struct ListaDupla * lista, int n)
 {
-	/*! em desenvolvimento*/
+  int meio;
+  meio = lista->tamanho / 2;
+  ins_depois(lista, n, meio);
 }   
 
 
 void exibe(struct ListaDupla *lista){   
- 	ListaDuplaDado *em_curso;   
+ 	struct ListaDuplaDado *em_curso;   
  	em_curso = lista->inicio;   
  	printf("[ ");   
  	while(em_curso != NULL){   
@@ -108,8 +112,12 @@ int main(int argc, char const *argv[])
   ins_inicio_lista(lista, 53);
   ins_inicio_lista(lista, 76);
   ins_inicio_lista(lista, 11);
+  ins_inicio_lista(lista, 62);
   ins_inicio_lista(lista, 78);
-  ins_inicio_lista(lista, 14);         
+  ins_inicio_lista(lista, 25);
+  ins_inicio_lista(lista, 77);
+  ins_inicio_lista(lista, 14);
+  inserirMeio(lista, 66);         
   inverter(lista);       
   
 	return 0;
