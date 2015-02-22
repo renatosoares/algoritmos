@@ -57,14 +57,7 @@ void inverter(struct ListaDupla *lista){
 	printf("\n");   
 }
 
-void inserirOrdenado(struct ListaDupla * lista, int n)
-{
-
-} 
-
-
-
-int ins_depois (struct ListaDupla * lista, int dado, int pos){   
+int ins_depois(struct ListaDupla * lista, int dado, int pos){   
   int i;   
   struct ListaDuplaDado *novo_elemento, *em_curso;
   novo_elemento = (struct ListaDuplaDado*) malloc(sizeof(struct ListaDuplaDado));   
@@ -80,6 +73,24 @@ int ins_depois (struct ListaDupla * lista, int dado, int pos){
   lista->tamanho++;   
   return 0;   
 }
+
+int ins_antes(struct ListaDupla * lista, int dado, int pos){   
+  int i;   
+  struct ListaDuplaDado *novo_elemento, *em_curso; 
+  novo_elemento = (struct ListaDuplaDado*) malloc(sizeof(struct ListaDuplaDado));  
+  if (novo_elemento == NULL) return -1;   
+  novo_elemento->dado = dado;   
+  em_curso = lista->inicio;   
+  for (i = 1; i < pos; ++i) em_curso = em_curso->proximo;   
+  novo_elemento->proximo = em_curso;   
+  novo_elemento-> anterior = em_curso->anterior;   
+  if(em_curso->anterior == NULL) lista->inicio = novo_elemento;   
+  else em_curso->anterior->proximo = novo_elemento;   
+  em_curso->anterior = novo_elemento;   
+  lista->tamanho++;   
+  return 0;   
+}   
+
 void inserirMeio(struct ListaDupla * lista, int n)
 {
   int meio;
@@ -87,14 +98,50 @@ void inserirMeio(struct ListaDupla * lista, int n)
   ins_depois(lista, n, meio);
 }   
 
+void inserirOrdenado(struct ListaDupla * lista, int nValor)
+{
+  struct ListaDuplaDado *dadoComparado;
+  dadoComparado = lista->inicio;
+  int posicao = 0;
+  while(dadoComparado != NULL)
+  {
+
+    if (nValor < dadoComparado->dado)
+    {
+
+      ins_antes(lista, nValor, posicao);
+      break;
+    }else
+    {
+   
+      
+      posicao++;
+      dadoComparado = dadoComparado->proximo;
+      if(dadoComparado->proximo == NULL)
+      {
+        ins_depois(lista, nValor, posicao);
+        break;
+      }else if (nValor < dadoComparado->dado)
+      {
+        posicao++;
+        ins_antes(lista, nValor, posicao);
+        break;
+      } 
+
+    }    
+   
+    
+  }
+ 
+}
 
 void exibe(struct ListaDupla *lista){   
  	struct ListaDuplaDado *em_curso;   
  	em_curso = lista->inicio;   
  	printf("[ ");   
  	while(em_curso != NULL){   
- 	 printf("%d ",em_curso->dado);   
- 	 em_curso = em_curso->proximo;   
+ 	  printf("%d ",em_curso->dado);   
+ 	  em_curso = em_curso->proximo;   
  	}   
  	printf("]\n");   
 }   
@@ -107,17 +154,21 @@ int main(int argc, char const *argv[])
   lista = (struct ListaDupla *) malloc(sizeof(struct ListaDupla));   
 
   inicializacao(lista);   
-  insercao_em_uma_lista_vazia(lista, 10); 
-  ins_inicio_lista(lista, 33);
-  ins_inicio_lista(lista, 53);
-  ins_inicio_lista(lista, 76);
-  ins_inicio_lista(lista, 11);
-  ins_inicio_lista(lista, 62);
-  ins_inicio_lista(lista, 78);
-  ins_inicio_lista(lista, 25);
-  ins_inicio_lista(lista, 77);
-  ins_inicio_lista(lista, 14);
-  inserirMeio(lista, 66);         
+  insercao_em_uma_lista_vazia(lista, 999);
+/*questao 2*/
+  inserirOrdenado(lista, 5); 
+  inserirOrdenado(lista, 4);
+  inserirOrdenado(lista, 6); 
+  inserirOrdenado(lista, 13);
+  inserirOrdenado(lista, 2);
+  inserirOrdenado(lista, 20);
+  inserirOrdenado(lista, 3);
+  inserirOrdenado(lista, 51); 
+  inserirOrdenado(lista, 7); 
+/*questao 1*/
+  inserirMeio(lista, 66);  
+  exibe(lista);
+/*questao 3*/
   inverter(lista);       
   
 	return 0;
