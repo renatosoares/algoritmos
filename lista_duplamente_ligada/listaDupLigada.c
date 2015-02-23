@@ -146,6 +146,73 @@ void exibe(struct ListaDupla *lista){
  	printf("]\n");   
 }   
 
+int remov(struct ListaDupla * lista, int pos){   
+  int i;   
+  struct ListaDuplaDado *remov_elemento, *em_curso;   
+  if(lista->tamanho == 0) return -1;   
+  if(pos == 1){ /* remoção do 1° elemento */   
+    remov_elemento = lista->inicio;   
+    lista->inicio = lista->inicio->proximo;   
+    if(lista->inicio == NULL) lista->fim = NULL;   
+   /* else lista->inicio->anterior == NULL;   */
+  }else if(pos == lista->tamanho){ /* remoção do último elemento */   
+    remov_elemento = lista->fim;   
+    lista->fim->anterior->proximo = NULL;   
+    lista->fim = lista->fim->anterior;   
+  }else { /* remoção em outro lugar */   
+    em_curso = lista->inicio;   
+    for(i=1;i<pos;++i) em_curso = em_curso->proximo;   
+    remov_elemento = em_curso;   
+    em_curso->anterior->proximo = em_curso->proximo;   
+    em_curso->proximo->anterior = em_curso->anterior;   
+  }   
+  /*free(remov_elemento->dado);   */
+  free(remov_elemento);   
+  lista->tamanho--;   
+  return 0;   
+}  
+
+void removerDuplicados(struct ListaDupla * lista)
+{
+  struct ListaDuplaDado *escolhido, *percorrer;   
+  escolhido = lista->inicio;  
+  percorrer = lista->inicio; 
+  int aux;
+  int controle;
+  int count = 1;
+  while(escolhido != NULL)
+  {
+    controle = 0;
+    aux = escolhido->dado;   
+    while(percorrer != NULL)
+    {
+      if (aux == percorrer->dado)
+      {
+        controle++;
+        if (controle == 2)
+        {
+          remov(lista, count);
+          count = 0;
+          break;
+        }
+
+      }
+      percorrer = percorrer->proximo;
+      count++; 
+    }
+    percorrer = lista->inicio; 
+    count = 1;
+    escolhido = escolhido->proximo;
+    if (count == 0)
+    {
+      break;
+    }
+       
+  }   
+   
+}
+
+
 int main(int argc, char const *argv[])
 {
 
@@ -163,15 +230,23 @@ int main(int argc, char const *argv[])
   inserirOrdenado(lista, 2);
   inserirOrdenado(lista, 20);
   inserirOrdenado(lista, 3);
+  inserirOrdenado(lista, 6); 
   inserirOrdenado(lista, 51); 
-  inserirOrdenado(lista, 7); 
+  inserirOrdenado(lista, 7);
+  inserirOrdenado(lista, 4); 
 /*questao 1*/
   inserirMeio(lista, 66);  
   exibe(lista);
 /*questao 3*/
-  inverter(lista);       
-  
+  inverter(lista); 
+
+/*questao 4*/
+  removerDuplicados(lista);
+  exibe(lista);
+
 	return 0;
+
+
 }
 
 /*****************************************************************************\
